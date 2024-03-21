@@ -100,10 +100,12 @@ contract Safe is
         address fallbackHandler,
         address paymentToken,
         uint256 payment,
-        address payable paymentReceiver
+        address payable paymentReceiver,
+        address restrictor
     ) external {
         // setupOwners checks if the Threshold is already set, therefore preventing that this method is called twice
         setupOwners(_owners, _threshold);
+        setupRestrictor(restrictor);
         if (fallbackHandler != address(0)) internalSetFallbackHandler(fallbackHandler);
         // As setupOwners can only be called if the contract has not been initialized we don't need a check for setupModules
         setupModules(to, data);

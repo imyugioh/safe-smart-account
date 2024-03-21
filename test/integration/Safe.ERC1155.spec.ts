@@ -26,7 +26,7 @@ describe("Safe", async () => {
             const { safe, token } = await setupWithTemplate();
 
             // Setup Safe
-            await safe.setup([user1.address, user2.address], 1, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero);
+            await safe.setup([user1.address, user2.address], 1, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero, AddressZero);
 
             // Mint test tokens
             await token.mint(user1.address, 23, 1337, "0x");
@@ -45,7 +45,17 @@ describe("Safe", async () => {
             const handler = await defaultTokenCallbackHandlerDeployment();
 
             // Setup Safe
-            await safe.setup([user1.address, user2.address], 1, AddressZero, "0x", handler.address, AddressZero, 0, AddressZero);
+            await safe.setup(
+                [user1.address, user2.address],
+                1,
+                AddressZero,
+                "0x",
+                handler.address,
+                AddressZero,
+                0,
+                AddressZero,
+                AddressZero,
+            );
 
             await token.mint(safe.address, 23, 1337, "0x");
             await expect(await token.balanceOf(safe.address, 23)).to.be.deep.eq(BigNumber.from(1337));

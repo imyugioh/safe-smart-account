@@ -28,7 +28,7 @@ describe("HandlerContext", async () => {
 
     it("works with the Safe", async () => {
         const { safe, handler } = await setup();
-        await safe.setup([user1.address, user2.address], 1, AddressZero, "0x", handler.address, AddressZero, 0, AddressZero);
+        await safe.setup([user1.address, user2.address], 1, AddressZero, "0x", handler.address, AddressZero, 0, AddressZero, AddressZero);
 
         const response = await user1.call({
             to: safe.address,

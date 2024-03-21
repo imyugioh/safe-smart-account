@@ -45,6 +45,7 @@ describe("Safe", async () => {
                     AddressZero,
                     0,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS200");
         });
@@ -60,6 +61,7 @@ describe("Safe", async () => {
                     AddressZero,
                     AddressZero,
                     0,
+                    AddressZero,
                     AddressZero,
                 ),
             )
@@ -81,6 +83,7 @@ describe("Safe", async () => {
                 AddressZero,
                 0,
                 AddressZero,
+                AddressZero,
             );
             await expect(
                 template.setup(
@@ -91,6 +94,7 @@ describe("Safe", async () => {
                     AddressZero,
                     AddressZero,
                     0,
+                    AddressZero,
                     AddressZero,
                 ),
             ).to.be.revertedWith("GS200");
@@ -108,6 +112,7 @@ describe("Safe", async () => {
                     AddressZero,
                     0,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS204");
         });
@@ -115,28 +120,38 @@ describe("Safe", async () => {
         it("should revert if 0 address is used as an owner", async () => {
             const { template } = await setupTests();
             await expect(
-                template.setup([user2.address, AddressZero], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero),
+                template.setup([user2.address, AddressZero], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero, AddressZero),
             ).to.be.revertedWith("GS203");
         });
 
         it("should revert if Safe itself is used as an owner", async () => {
             const { template } = await setupTests();
             await expect(
-                template.setup([user2.address, template.address], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero),
+                template.setup(
+                    [user2.address, template.address],
+                    2,
+                    AddressZero,
+                    "0x",
+                    AddressZero,
+                    AddressZero,
+                    0,
+                    AddressZero,
+                    AddressZero,
+                ),
             ).to.be.revertedWith("GS203");
         });
 
         it("should revert if sentinel is used as an owner", async () => {
             const { template } = await setupTests();
             await expect(
-                template.setup([user2.address, AddressOne], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero),
+                template.setup([user2.address, AddressOne], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero, AddressZero),
             ).to.be.revertedWith("GS203");
         });
 
         it("should revert if same owner is included twice one after each other", async () => {
             const { template } = await setupTests();
             await expect(
-                template.setup([user2.address, user2.address], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero),
+                template.setup([user2.address, user2.address], 2, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero, AddressZero),
             ).to.be.revertedWith("GS203");
         });
 
@@ -151,6 +166,7 @@ describe("Safe", async () => {
                     AddressZero,
                     AddressZero,
                     0,
+                    AddressZero,
                     AddressZero,
                 ),
             ).to.be.revertedWith("GS201");
@@ -168,13 +184,16 @@ describe("Safe", async () => {
                     AddressZero,
                     0,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS202");
         });
 
         it("should revert if owners are empty", async () => {
             const { template } = await setupTests();
-            await expect(template.setup([], 0, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero)).to.be.revertedWith("GS202");
+            await expect(
+                template.setup([], 0, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero, AddressZero),
+            ).to.be.revertedWith("GS202");
         });
 
         it("should set fallback handler and call sub inititalizer", async () => {
@@ -200,6 +219,7 @@ describe("Safe", async () => {
                     AddressOne,
                     AddressZero,
                     0,
+                    AddressZero,
                     AddressZero,
                 ),
             )
@@ -244,6 +264,7 @@ describe("Safe", async () => {
                     AddressZero,
                     0,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS000");
         });
@@ -264,6 +285,7 @@ describe("Safe", async () => {
                     AddressZero,
                     payment,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS011");
         });
@@ -283,6 +305,7 @@ describe("Safe", async () => {
                 AddressZero,
                 AddressZero,
                 payment,
+                AddressZero,
                 AddressZero,
             );
 
@@ -306,6 +329,7 @@ describe("Safe", async () => {
                 AddressZero,
                 payment,
                 user2.address,
+                AddressZero,
             );
 
             await expect(await hre.ethers.provider.getBalance(template.address)).to.be.deep.eq(parseEther("0"));
@@ -330,6 +354,7 @@ describe("Safe", async () => {
                     mock.address,
                     payment,
                     AddressZero,
+                    AddressZero,
                 ),
             ).to.be.revertedWith("GS012");
         });
@@ -348,6 +373,7 @@ describe("Safe", async () => {
                 AddressZero,
                 mock.address,
                 payment,
+                AddressZero,
                 AddressZero,
             );
 
@@ -371,6 +397,7 @@ describe("Safe", async () => {
                 mock.address,
                 payment,
                 user2.address,
+                AddressZero,
             );
 
             expect(await mock.callStatic.invocationCountForCalldata(transferData)).to.be.deep.equals(BigNumber.from(1));
@@ -382,7 +409,7 @@ describe("Safe", async () => {
             const { template } = await setupTests();
 
             await expect(
-                template.setup([user1.address], 1, user2.address, "0xbeef73", AddressZero, AddressZero, 0, AddressZero),
+                template.setup([user1.address], 1, user2.address, "0xbeef73", AddressZero, AddressZero, 0, AddressZero, AddressZero),
             ).to.be.revertedWith("GS002");
         });
 
@@ -390,7 +417,7 @@ describe("Safe", async () => {
             const { template } = await setupTests();
 
             await expect(
-                template.setup([user1.address], 1, AddressZero, "0x", template.address, AddressZero, 0, AddressZero),
+                template.setup([user1.address], 1, AddressZero, "0x", template.address, AddressZero, 0, AddressZero, AddressZero),
             ).to.be.revertedWith("GS400");
         });
     });
