@@ -4,7 +4,6 @@ pragma solidity >=0.7.0 <0.9.0;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "../external/SafeMath.sol";
 import "../common/Enum.sol";
-import "hardhat/console.sol";
 
 /**
  * @title RestrictorUpgradeable
@@ -101,6 +100,7 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
 
     /**
      * @notice Whitelist recipient addresses
+     * @param proxy Safe proxy address
      * @param users User address array
      */
     function addWhitelistAddresses(address proxy, address[] calldata users) external onlyOwner onlyProxy(proxy) {
@@ -112,6 +112,7 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
 
     /**
      * @notice Remove recipient addresses from whitelist
+     * @param proxy Safe proxy address
      * @param users User address array
      */
     function removeWhitelistAddresses(address proxy, address[] calldata users) external onlyOwner onlyProxy(proxy) {
@@ -123,6 +124,7 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
 
     /**
      * @notice Whitelist methods
+     * @param proxy Safe proxy address
      * @param selectors Function selector array
      */
     function addWhitelistMethods(address proxy, bytes4[] calldata selectors) external onlyOwner onlyProxy(proxy) {
@@ -134,6 +136,7 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
 
     /**
      * @notice Remove methods from whitelist
+     * @param proxy Safe proxy address
      * @param selectors Function selector array
      */
     function removeWhitelistMethods(address proxy, bytes4[] calldata selectors) external onlyOwner onlyProxy(proxy) {
@@ -144,7 +147,8 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
     }
 
     /**
-     * @notice Set daily token receive cap from users.
+     * @notice Set daily token receive cap to users.
+     * @param proxy Safe proxy address
      * @param users User address array
      * @param tokens ERC20 Token address array
      * @param amounts Cap amount array
@@ -165,7 +169,8 @@ contract RestrictorUpgradeable is OwnableUpgradeable {
     }
 
     /**
-     * @notice Set monthly token receive cap from users.
+     * @notice Set monthly token receive cap to users.
+     * @param proxy Safe proxy address
      * @param users User address array
      * @param tokens ERC20 Token address array
      * @param amounts Cap amount array
