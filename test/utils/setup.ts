@@ -1,4 +1,4 @@
-import hre, { deployments } from "hardhat";
+import hre, { deployments, ethers, upgrades } from "hardhat";
 import { Wallet, Contract } from "ethers";
 import { AddressZero } from "@ethersproject/constants";
 import solc from "solc";
@@ -76,17 +76,36 @@ export const getSafeTemplate = async (saltNumber: string = getRandomIntAsString(
     return Safe.attach(template);
 };
 
+export const getRestrictor = async () => {
+    const restrictor = await upgrades.deployProxy(await ethers.getContractFactory("RestrictorUpgradeable"), [], {
+        initializer: "initialize",
+    });
+    await restrictor.deployed();
+    return restrictor;
+};
+
 export const getSafeWithOwners = async (
     owners: string[],
     threshold?: number,
     fallbackHandler?: string,
+    restrictor?: string,
     logGasUsage?: boolean,
     saltNumber: string = getRandomIntAsString(),
 ) => {
     const template = await getSafeTemplate(saltNumber);
     await logGas(
         `Setup Safe with ${owners.length} owner(s)${fallbackHandler && fallbackHandler !== AddressZero ? " and fallback handler" : ""}`,
-        template.setup(owners, threshold || owners.length, AddressZero, "0x", fallbackHandler || AddressZero, AddressZero, 0, AddressZero),
+        template.setup(
+            owners,
+            threshold || owners.length,
+            AddressZero,
+            "0x",
+            fallbackHandler || AddressZero,
+            AddressZero,
+            0,
+            AddressZero,
+            restrictor || AddressZero,
+        ),
         !logGasUsage,
     );
     return template;
